@@ -3,7 +3,7 @@ import 'iconify-icon';
 import logo from './assets/img/to-do.svg';
 import { createStorage } from './Storage.js';
 import { createTodo } from './Todo.js';
-import { format, parseISO, isValid, nextFriday, isFuture } from 'date-fns';
+import { format, parseISO, isValid, nextFriday, isFuture, nextSunday, startOfWeek, endOfWeek } from 'date-fns';
 
 const UI = (() => {
     const storage = createStorage();
@@ -84,6 +84,15 @@ const UI = (() => {
         });
 
         const filterTodos = searchTodos.filter(todo => {
+            const today = format(new Date(), 'yyyy-MM-dd');
+            const startOfWeekDate = format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd');
+            const endOfWeekDate = format(endOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd');
+
+            if (filter === 'today') {
+                return todo.dueDate === today;
+            } else if (filter === 'this week') {
+                return todo.dueDate >= startOfWeekDate && todo.dueDate <= endOfWeekDate;
+            }
             // If no filter is selected, return all todos
             return true;
         });
@@ -442,6 +451,18 @@ const UI = (() => {
             // If I click outside the sidebar or toggle, close it
             if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
                 sidebar.classList.remove('active');
+            }
+        });
+
+        const sidebarMenu = document.querySelector('.sidebar-menu');
+        sidebarMenu.addEventListener('click', (e) => {
+            if (e.target.classList.contains('inbox')) {
+                displayTodos();
+            }
+            else if (e.target.classList.contains('today')) {
+                displayTodos(null, 'today');
+            } else if (e.target.classList.contains('this-week')) {
+                displayTodos(null, 'this week');
             }
         });
     };
