@@ -61,19 +61,44 @@ const UI = (() => {
             projectList.appendChild(projectElement);
         });
     };
+    /*
+    Make projectName optional, otherwise search all projects
+    Get list of projects to search through
+        Get all todos from the list
+            Push todos + project name to new array
+    Filter todos (today or from this week)
+    Push filtered todos
+    */
+    const displayTodos = (projectName = null, filter = null) => {
+        const searchProjects = projectName
+            ? [storage.findProject(projectName)]
+            : storage.getProjects();
 
-    const displayTodos = (projectName) => {
-        const project = storage.findProject(projectName);
+        let searchTodos = [];
+        searchProjects.forEach(project => {
+            const projectTodos = project.getTodos();
+            projectTodos.forEach(todo => {
+                // to know which project the todo belongs to
+                searchTodos.push({ ...todo, projectName: project.name });
+            });
+        });
+
+        const filterTodos = searchTodos.filter(todo => {
+            // If no filter is selected, return all todos
+            return true;
+        });
+
         const todoList = document.querySelector('.todo-list');
         todoList.textContent = '';
 
-        project.getTodos().forEach(todo => {
-            const todoElement = createTodoElement(todo, projectName);
+        filterTodos.forEach(todo => {
+            const todoElement = createTodoElement(todo, todo.projectName);
             todoList.appendChild(todoElement);
         });
     };
 
     const createTodoElement = (todo, projectName) => {
+        const project = storage.findProject(projectName);
         const todoElement = document.createElement('li');
 
         const todoDetails = document.createElement('div');
@@ -83,8 +108,8 @@ const UI = (() => {
         checkbox.type = 'checkbox';
         checkbox.checked = todo.checked;
         checkbox.addEventListener('change', () => {
-            todo.toggleChecked();
-            // console.log(todo);
+            const todoInStorage = project.getTodos().find(storedTodo => storedTodo.title === todo.title);
+            todoInStorage.toggleChecked();
             storage.saveProjects();
         });
 
