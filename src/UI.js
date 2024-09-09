@@ -68,82 +68,88 @@ const UI = (() => {
         todoList.textContent = '';
 
         project.getTodos().forEach(todo => {
-            const todoElement = document.createElement('li');
-
-            const todoDetails = document.createElement('div');
-            todoDetails.classList.add('todo-details');
-
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.checked = todo.checked;
-            checkbox.addEventListener('change', () => {
-                todo.toggleChecked();
-                // console.log(todo);
-                storage.saveProjects();
-            });
-
-            const details = document.createElement('div');
-            details.classList.add('details');
-
-            details.addEventListener('click', () => {
-                displayTodoDetails(projectName, todo.title);
-            });
-
-            const name = document.createElement('span');
-            name.classList.add('name');
-            name.textContent = `${todo.title}`;
-
-            const description = document.createElement('span');
-            description.classList.add('description');
-            description.textContent = `${todo.description}`;
-
-            details.append(name, description);
-            todoDetails.append(checkbox, details);
-
-            const todoStatus = document.createElement('div');
-            todoStatus.classList.add('todo-status');
-
-            const status = document.createElement('div');
-            status.classList.add('status');
-
-            const dueDate = document.createElement('span');
-            dueDate.classList.add('date');
-            dueDate.textContent = todo.dueDate ? format(parseISO(todo.dueDate), 'PP') : '';
-
-            const priorityLabel = document.createElement('span');
-            priorityLabel.classList.add('priority-label', `${todo.priority}`);
-            priorityLabel.textContent = `${todo.priority}`;
-
-            status.append(dueDate, priorityLabel);
-
-            const buttons = document.createElement('div');
-            buttons.classList.add('buttons');
-
-            const editBtn = document.createElement('button');
-            editBtn.classList.add('edit-todo');
-            const editIcon = document.createElement('iconify-icon');
-            editIcon.setAttribute('icon', 'tabler:edit');
-            editBtn.appendChild(editIcon);
-
-            editBtn.addEventListener('click', () => {
-                editTodoDetails(projectName, todo.title);
-            });
-
-            const removeBtn = document.createElement('button');
-            removeBtn.classList.add('remove-todo');
-            const removeIcon = document.createElement('iconify-icon');
-            removeIcon.setAttribute('icon', 'tabler:trash');
-            removeBtn.appendChild(removeIcon);
-
-            removeBtn.addEventListener('click', () => {
-                removeTodo(projectName, todo.title);
-            });
-
-            buttons.append(editBtn, removeBtn);
-            todoStatus.append(status, buttons);
-            todoElement.append(todoDetails, todoStatus);
+            const todoElement = createTodoElement(todo, projectName);
             todoList.appendChild(todoElement);
         });
+    };
+
+    const createTodoElement = (todo, projectName) => {
+        const todoElement = document.createElement('li');
+
+        const todoDetails = document.createElement('div');
+        todoDetails.classList.add('todo-details');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = todo.checked;
+        checkbox.addEventListener('change', () => {
+            todo.toggleChecked();
+            // console.log(todo);
+            storage.saveProjects();
+        });
+
+        const details = document.createElement('div');
+        details.classList.add('details');
+
+        details.addEventListener('click', () => {
+            displayTodoDetails(projectName, todo.title);
+        });
+
+        const name = document.createElement('span');
+        name.classList.add('name');
+        name.textContent = `${todo.title}`;
+
+        const description = document.createElement('span');
+        description.classList.add('description');
+        description.textContent = `${todo.description}`;
+
+        details.append(name, description);
+        todoDetails.append(checkbox, details);
+
+        const todoStatus = document.createElement('div');
+        todoStatus.classList.add('todo-status');
+
+        const status = document.createElement('div');
+        status.classList.add('status');
+
+        const dueDate = document.createElement('span');
+        dueDate.classList.add('date');
+        dueDate.textContent = todo.dueDate ? format(parseISO(todo.dueDate), 'PP') : '';
+
+        const priorityLabel = document.createElement('span');
+        priorityLabel.classList.add('priority-label', `${todo.priority}`);
+        priorityLabel.textContent = `${todo.priority}`;
+
+        status.append(dueDate, priorityLabel);
+
+        const buttons = document.createElement('div');
+        buttons.classList.add('buttons');
+
+        const editBtn = document.createElement('button');
+        editBtn.classList.add('edit-todo');
+        const editIcon = document.createElement('iconify-icon');
+        editIcon.setAttribute('icon', 'tabler:edit');
+        editBtn.appendChild(editIcon);
+
+        editBtn.addEventListener('click', () => {
+            editTodoDetails(projectName, todo.title);
+        });
+
+        const removeBtn = document.createElement('button');
+        removeBtn.classList.add('remove-todo');
+        const removeIcon = document.createElement('iconify-icon');
+        removeIcon.setAttribute('icon', 'tabler:trash');
+        removeBtn.appendChild(removeIcon);
+
+        removeBtn.addEventListener('click', () => {
+            removeTodo(projectName, todo.title);
+        });
+
+        buttons.append(editBtn, removeBtn);
+        todoStatus.append(status, buttons);
+        todoElement.append(todoDetails, todoStatus);
+
+        return todoElement;
     };
 
     const addProjectModal = () => {
