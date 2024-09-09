@@ -154,6 +154,7 @@ const UI = (() => {
         modalContent.classList.add('modal-content');
 
         modalContent.innerHTML = `
+            <button class="close-modal">x</button>
             <h2>Add a Project</h2>
             <form>
                 <div class="error"></div>
@@ -174,6 +175,8 @@ const UI = (() => {
             displayProjects();
             modal.remove();
         });
+        const closeModal = document.querySelector('.close-modal');
+        closeModal.addEventListener('click', () => modal.remove());
     };
 
     const addTodoModal = () => {
@@ -185,6 +188,7 @@ const UI = (() => {
         modalContent.classList.add('modal-content');
 
         modalContent.innerHTML = `  
+            <button class="close-modal">x</button>
             <h2>Add a Todo to "${currentProject}"</h2>
             <form>
                 <div class="error"></div>
@@ -240,6 +244,8 @@ const UI = (() => {
                 modal.remove();
             }
         });
+        const closeModal = document.querySelector('.close-modal');
+        closeModal.addEventListener('click', () => modal.remove());
     };
 
     const validateTodo = (dueDate) => {
@@ -283,6 +289,7 @@ const UI = (() => {
         modalContent.classList.add('modal-content');
 
         modalContent.innerHTML = `
+            <button class="close-modal">x</button>
             <h2>${todo.title}</h2>
             <form>
                 <div class="error"></div>
@@ -339,6 +346,8 @@ const UI = (() => {
             console.log(todo);
             console.log(storage.findProject(projectName).getTodos());
         });
+        const closeModal = document.querySelector('.close-modal');
+        closeModal.addEventListener('click', () => modal.remove());
     };
 
     const displayTodoDetails = (projectName, todoTitle) => {
@@ -352,6 +361,7 @@ const UI = (() => {
         modalContent.classList.add('modal-content');
 
         modalContent.innerHTML = `
+            <button class="close-modal">x</button>
             <h2>${todo.title}</h2>
             <p>Description: <textarea class="description" readonly>${todo.description}</textarea></p>
             <p>Due Date: <span class="date">${todo.dueDate ? todo.dueDate : 'Not assigned'}</span></p>
@@ -374,6 +384,8 @@ const UI = (() => {
                 modal.remove();
             }
         });
+        const closeModal = document.querySelector('.close-modal');
+        closeModal.addEventListener('click', () => modal.remove());
     };
 
     const setupEventListeners = () => {

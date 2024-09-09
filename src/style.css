@@ -386,6 +386,14 @@ a {
     font-weight: 300;
 }
 
+.modal .close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border: none;
+    font-size: 1.8rem;
+}
+
 .sidebar-toggle {
     display: none;
 }
