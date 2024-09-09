@@ -147,6 +147,7 @@ const UI = (() => {
     };
 
     const addProjectModal = () => {
+        removeCurrentModal();
         const modal = document.createElement('div');
         modal.classList.add('modal');
         const modalContent = document.createElement('div');
@@ -176,6 +177,7 @@ const UI = (() => {
     };
 
     const addTodoModal = () => {
+        removeCurrentModal();
         const modal = document.createElement('div');
         modal.classList.add('modal');
 
@@ -265,7 +267,13 @@ const UI = (() => {
         }
     };
 
+    const removeCurrentModal = () => {
+        const currentModal = document.querySelector('.modal');
+        if (currentModal) currentModal.remove();
+    };
+
     const editTodoDetails = (projectName, todoTitle) => {
+        removeCurrentModal();
         const project = storage.findProject(projectName);
         const todo = project.getTodos().find(todo => todo.title === todoTitle);
 
@@ -334,6 +342,7 @@ const UI = (() => {
     };
 
     const displayTodoDetails = (projectName, todoTitle) => {
+        removeCurrentModal();
         const project = storage.findProject(projectName);
         const todo = project.getTodos().find(todo => todo.title === todoTitle);
 
